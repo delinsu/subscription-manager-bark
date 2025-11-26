@@ -1,0 +1,12 @@
+# subscriptions.yaml
+- name: "Netflix"
+  price: 15.99
+  cycle: "monthly"
+  next_payment_date: "2024-12-15"
+  bark_key: "80be90a14d3b5165240f59e029f50ada979c45a85a933b1dcc839bae1452002e" # 你的 Bark Key
+
+- name: "GitHub Pro"
+  price: 4.00
+  cycle: "monthly"
+  next_payment_date: "2024-12-20"
+  bark_key: "80be90a14d3b5165240f59e029f50ada979c45a85a933b1dcc839bae1452002e"

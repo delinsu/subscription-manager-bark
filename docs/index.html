@@ -1,0 +1,50 @@
+<!-- docs/index.html -->
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>我的订阅管家 (无服务器版)</title>
+    <script src="https://cdn.jsdelivr.net/npm/js-yaml@4/dist/js-yaml.min.js"></script>
+</head>
+<body>
+    <h1>我的订阅管家</h1>
+    <div id="loading">正在加载订阅数据...</div>
+    <div id="subscriptions-list"></div>
+
+    <script>
+        const repoOwner = 'delinsu';
+        const repoName = 'subscription-manager-bark';
+        const dataFilePath = 'subscriptions.yaml';
+
+        fetch(`https://api.github.com/repos/${repoOwner}/${repoName}/contents/${dataFilePath}`)
+            .then(response => response.json())
+            .then(data => {
+                const content = atob(data.content); // 解码 Base64
+                const subscriptions = jsyaml.load(content); // 解析 YAML
+                renderSubscriptions(subscriptions);
+            })
+            .catch(error => {
+                console.error('Error loading data:', error);
+                document.getElementById('loading').innerText = '加载失败，请检查网络或仓库设置。';
+            });
+
+        function renderSubscriptions(subs) {
+            const listContainer = document.getElementById('subscriptions-list');
+            const loading = document.getElementById('loading');
+            loading.style.display = 'none';
+
+            let html = '<table><tr><th>名称</th><th>价格</th><th>周期</th><th>下次付款日期</th></tr>';
+            subs.forEach(sub => {
+                html += `<tr>
+                    <td>${sub.name}</td>
+                    <td>${sub.price}</td>
+                    <td>${sub.cycle}</td>
+                    <td>${sub.next_payment_date}</td>
+                </tr>`;
+            });
+            html += '</table>';
+            listContainer.innerHTML = html;
+        }
+    </script>
+</body>
+</html>
